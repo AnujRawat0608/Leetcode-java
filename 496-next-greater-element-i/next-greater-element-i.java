@@ -1,39 +1,22 @@
 class Solution {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-       
-    if (nums2.length == 0 || nums1.length == 0)
-      return new int[0];
+           Map<Integer, Integer> nextGreaterMap = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
 
-    Map<Integer, Integer> numberNGE = new HashMap<>();
-    Stack<Integer> numStack = new Stack<>();
+        // Traverse nums2 and compute next greater elements
+        for (int num : nums2) {
+            while (!stack.isEmpty() && stack.peek() < num) {
+                nextGreaterMap.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
 
-    numStack.push(nums2[nums2.length - 1]);
-    numberNGE.put(nums2[nums2.length - 1], -1);
+        // Fill the result array for nums1 using the precomputed map
+        int[] result = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++) {
+            result[i] = nextGreaterMap.getOrDefault(nums1[i], -1);
+        }
 
-    for (int i = nums2.length - 2; i >= 0; i--) {
-
-      if (nums2[i] < numStack.peek()) {
-        numberNGE.put(nums2[i], numStack.peek());
-        numStack.push(nums2[i]);
-        continue;
-      }
-
-      while (!numStack.isEmpty() && numStack.peek() < nums2[i])
-        numStack.pop();
-
-      if (numStack.isEmpty()) {
-        numStack.push(nums2[i]);
-        numberNGE.put(nums2[i], -1);
-      } else {
-        numberNGE.put(nums2[i], numStack.peek());
-        numStack.push(nums2[i]);
-      }
+        return result;
     }
-
-    for (int i = 0; i < nums1.length; i++)
-      nums1[i] = numberNGE.get(nums1[i]);
-
-    return nums1;
-  }
-
 }
