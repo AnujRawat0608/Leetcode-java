@@ -7,10 +7,17 @@ class Solution {
 
         for(int i= 0; i< n; i++){
             if(nums[i] == target){
-                if(start == -1) start = i;
+                if(start == -1){
+
+                start = i;
+                end = i;
+            
+            }else{
                 end = i;
             }
-        }
+        
+            }
+            }
         return new int[]{start, end};
 
     }
