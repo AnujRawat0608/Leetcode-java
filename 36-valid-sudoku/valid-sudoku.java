@@ -1,39 +1,44 @@
+import java.util.HashSet;
+
 class Solution {
     public boolean isValidSudoku(char[][] board) {
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                char current = board[i][j];
+        // Create 3 arrays of sets: one for rows, one for columns, one for boxes
+        HashSet<Character>[] rows = new HashSet[9];
+        HashSet<Character>[] columns = new HashSet[9];
+        HashSet<Character>[] boxes = new HashSet[9];
 
-                if (current == '.') continue;
-
-                // Check row
-                for (int col = 0; col < 9; ++col) {
-                    if (col != j && board[i][col] == current) {
-                        return false;
-                    }
-                }
-
-                // Check column
-                for (int row = 0; row < 9; ++row) {
-                    if (row != i && board[row][j] == current) {
-                        return false;
-                    }
-                }
-
-                // Check 3×3 box
-                int blockRow = (i / 3) * 3;
-                int blockCol = (j / 3) * 3;
-
-                for (int row = blockRow; row < blockRow + 3; ++row) {
-                    for (int col = blockCol; col < blockCol + 3; ++col) {
-                        if ((row != i || col != j) && board[row][col] == current) {
-                            return false;
-                        }
-                    }
-                }
-            }
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new HashSet<>();
+            columns[i] = new HashSet<>();
+            boxes[i] = new HashSet<>();
         }
 
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                char current = board[row][col];
+
+                if (current == '.') continue; // skip empty cells
+
+                // Check row
+                if (rows[row].contains(current)) {
+                    return false;
+                }
+                rows[row].add(current);
+
+                // Check column
+                if (columns[col].contains(current)) {
+                    return false;
+                }
+                columns[col].add(current);
+
+                // Check 3x3 box
+                int boxIndex = (row / 3) * 3 + (col / 3);
+                if (boxes[boxIndex].contains(current)) {
+                    return false;
+                }
+                boxes[boxIndex].add(current);
+            }
+        }
         return true;
     }
 }
