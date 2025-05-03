@@ -12,7 +12,7 @@ class Solution {
             }
         }
 
-        return number.substring(0, toRemove) + number.substring(toRemove + 1, number.length());
+        return number.substring(0, toRemove) + number.substring(toRemove + 1);
 
     }
 }
