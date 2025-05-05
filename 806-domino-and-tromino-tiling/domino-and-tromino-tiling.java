@@ -2,7 +2,7 @@ class Solution
 {
     public int numTilings(int n) 
     {
-        int MOD = 1_000_000_007;
+        int MOD = 1000000007;
 
         // Step 1: Handle base cases
         if (n == 1)
