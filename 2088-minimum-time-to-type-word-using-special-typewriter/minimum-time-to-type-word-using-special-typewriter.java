@@ -1,20 +1,19 @@
 class Solution {
     public int minTimeToType(String word) {
-        int totalTime = 0;
-        char current = 'a';  // starting point
+       int totalTime = 0;
+       char current = 'a';
 
-        for (char c : word.toCharArray()) {
-            // distance in clockwise and counterclockwise directions
-            int clockwise = Math.abs(c - current);
-            int counterClockwise = 26 - clockwise;
+       for(char c : word.toCharArray()){
 
-            int moveTime = Math.min(clockwise, counterClockwise);
-            totalTime += moveTime + 1; // +1 for typing
+        int clockwise = Math.abs(c - current);
+        int anticlock = 26 - clockwise;
 
-            current = c; // update current pointer
-        }
+        int moveTime = Math.min(clockwise, anticlock);
+        totalTime += moveTime + 1;
 
-        return totalTime;
-        
+        current =c ; 
+       }
+       return totalTime;
+
     }
 }
