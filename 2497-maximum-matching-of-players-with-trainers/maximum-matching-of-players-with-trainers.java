@@ -2,21 +2,20 @@ class Solution {
     public int matchPlayersAndTrainers(int[] players, int[] trainers) {
         Arrays.sort(players);
         Arrays.sort(trainers);
-        
-        int count = 0;
-        int i = 0; // pointer for players
-        int j = 0; // pointer for trainers
-        
-        while (i < players.length && j < trainers.length) {
-            if (players[i] <= trainers[j]) {
-                // Match found, move both pointers
-                count++;
+
+        int n = players.length;
+        int m = trainers.length;
+
+        int count = 0; 
+        int i=0;
+        int j= 0;
+
+        while(i < n && j < m){
+            if(players[i] <= trainers[j]){
                 i++;
-                j++;
-            } else {
-                // Current trainer can't train this player, try next trainer
-                j++;
+                count ++;
             }
+            j++;
         }
         return count;
     }
