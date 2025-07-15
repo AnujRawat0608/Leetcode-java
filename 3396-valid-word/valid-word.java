@@ -1,24 +1,25 @@
 class Solution {
     public boolean isValid(String word) {
-        int n = word.length();
-        int vowels =0;
-        int consonants = 0;
-
-        if(n < 3){
+        if (word.length() < 3) {
             return false;
         }
-        for(char c : word.toCharArray()){
-            if(Character.isLetter(c)){
-                if("aeiouAEIOU".indexOf(c) != -1){
-                    vowels++;
-                }else{
-                    consonants++;
+
+        boolean hasVowel = false;
+        boolean hasConsonant = false;
+
+        for (char ch : word.toCharArray()) {
+            if (Character.isLetter(ch)) {
+                ch = Character.toLowerCase(ch);
+                if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+                    hasVowel = true;
+                } else {
+                    hasConsonant = true;
                 }
-            }else if(!Character.isDigit(c)){
+            } else if (!Character.isDigit(ch)) {
                 return false;
             }
         }
-        return vowels >= 1 && consonants >=1;
-        
+
+        return hasVowel && hasConsonant;
     }
 }
