@@ -1,18 +1,31 @@
 class Solution {
     public int countCompleteSubarrays(int[] nums) {
-        int left = 0, res = 0;
-        int k = (int) Arrays.stream(nums).distinct().count();
-        Map<Integer, Integer> mpp = new HashMap<>();
 
-        for (int i = 0; i < nums.length; ++i) {
-            mpp.put(nums[i], mpp.getOrDefault(nums[i], 0) + 1);
-            while (mpp.size() == k) {
-                res += nums.length - i;
-                mpp.put(nums[left], mpp.get(nums[left]) - 1);
-                if (mpp.get(nums[left]) == 0) mpp.remove(nums[left]);
+        Set<Integer> uniqueSet = new HashSet<>();
+        for(int num : nums){
+            uniqueSet.add(num);
+        } // craeting set to get unique elements
+
+        int totalUnique = uniqueSet.size();
+        int left = 0;
+        int result = 0;
+
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        for(int right = 0; right < nums.length; right++){
+            freqMap.put(nums[right], freqMap.getOrDefault(nums[right], 0) +1);
+
+            while(freqMap.size() == totalUnique){
+                result += (nums.length - right);
+                freqMap.put(nums[left], freqMap.get(nums[left]) -1);
+                if(freqMap.get(nums[left]) == 0){
+                    freqMap.remove(nums[left]);
+                }
                 left++;
             }
         }
-        return res;
+return result;
+
+
+        
     }
 }
