@@ -12,48 +12,32 @@
  *         this.right = right;
  *     }
  * }
- */
-class Solution {
+ */class Solution {
+    int preIndex = 0;
+    HashMap<Integer, Integer> map = new HashMap<>();
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return build(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1);
+
+        // Store inorder values with their indexes
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+
+        return build(preorder, 0, inorder.length - 1);
     }
 
-    private TreeNode build(int[] preorder, int[] inorder,
-                           int preStart, int preEnd,
-                           int inStart, int inEnd) {
+    private TreeNode build(int[] preorder, int inStart, int inEnd) {
 
-        // Base case: no elements left
-        if (preStart > preEnd || inStart > inEnd) {
-            return null;
-        }
+        if (inStart > inEnd) return null;
 
-        // Root value is always the first element in preorder range
-        int rootVal = preorder[preStart];
+        int rootVal = preorder[preIndex++];
         TreeNode root = new TreeNode(rootVal);
 
-        // Find root in inorder (to split left and right subtree)
-        int mid = inStart;
-        while (mid <= inEnd && inorder[mid] != rootVal) {
-            mid++;
-        }
+        // Fetch index in O(1)
+        int rootIndex = map.get(rootVal);
 
-        // Count how many nodes are in the left subtree
-        int leftSize = mid - inStart;
-
-        // ---------- Build left subtree ----------
-        root.left = build(preorder, inorder,
-                preStart + 1,                     // start after root
-                preStart + leftSize,              // end of left subtree
-                inStart,                          // inorder left start
-                mid - 1);                         // inorder left end
-
-        // ---------- Build right subtree ----------
-        root.right = build(preorder, inorder,
-                preStart + leftSize + 1,          // start after left subtree
-                preEnd,                           // preorder end
-                mid + 1,                          // inorder right start
-                inEnd);                           // inorder right end
+        root.left = build(preorder, inStart, rootIndex - 1);
+        root.right = build(preorder, rootIndex + 1, inEnd);
 
         return root;
     }
