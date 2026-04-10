@@ -1,22 +1,19 @@
 class Solution {
     public int climbStairs(int n) {
-        int distinctWays = 0;
-
-        if(n ==0)return 0;
-        if(n == 1)return 1;
-        if(n == 2)return 2;
-
-        int onestep = 2;
-        int twostep = 1;
-        int all = 0;
-
-        for(int i=2; i<n; i++){
-            all = onestep + twostep;
-            twostep = onestep;
-            onestep = all;
+        if (n == 1) return 1;
+        
+        // create a table to store answers
+        int[] dp = new int[n + 1];
+        
+        // fill base cases
+        dp[1] = 1;
+        dp[2] = 2;
+        
+        // fill rest bottom-up
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
         }
-return all;
-
-
+        
+        return dp[n];
     }
 }
