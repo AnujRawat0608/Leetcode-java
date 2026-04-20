@@ -8,7 +8,7 @@ class Solution {
         caldistance = Math.max(caldistance, j-i);
 
       }
-    }
+      }
       return caldistance;
 
         
