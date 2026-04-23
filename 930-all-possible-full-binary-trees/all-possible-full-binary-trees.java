@@ -14,6 +14,9 @@
  * }
  */
 class Solution {
+
+    Map<Integer, List<TreeNode>> memo = new HashMap<>();
+
     public List<TreeNode> allPossibleFBT(int n) {
         List<TreeNode> result= new ArrayList<>();
 
@@ -23,6 +26,7 @@ class Solution {
             result.add(new TreeNode(0));
             return result;
         }
+        if(memo.containsKey(n)) return memo.get(n);
 
         for(int i=1; i<n; i+=2){
             List<TreeNode> leftTrees = allPossibleFBT(i);
@@ -37,6 +41,7 @@ class Solution {
                 }
             }
         }
+        memo.put(n,result);
         return result;
     }
 }
