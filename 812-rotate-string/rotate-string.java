@@ -1,17 +1,17 @@
 class Solution {
     public boolean rotateString(String s, String goal) {
 
-        int m = s.length();
-        int n = goal.length();
-         
-         if(m != n){
-            return false;
-         }
-         if(m == n && (s+s).contains(goal)){
-            return true;
-         }
-return false;
-        
+        int n = s.length();
+        int m = goal.length();
+
+        if(n != m)return false;
+        for(int i = 0; i< n ; i++){
+            s = s.substring(1) + s.charAt(0);
+            if(s.contains(goal)){
+                return true;
+            }
+        }
+        return false;
         
     }
 }
