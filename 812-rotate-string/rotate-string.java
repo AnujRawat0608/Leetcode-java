@@ -1,23 +1,17 @@
 class Solution {
     public boolean rotateString(String s, String goal) {
 
-        if(s.length() != goal.length()){
+        int m = s.length();
+        int n = goal.length();
+         
+         if(m != n){
             return false;
-        }
-        char[] schars = s.toCharArray();
-
-        for(int rotationCount = 0; rotationCount < s.length(); ++rotationCount){
-            schars = rotateOnce(schars);
-            if(new String(schars).equals(goal))return true;
-        }
-        return false;
+         }
+         if(m == n && (s+s).contains(goal)){
+            return true;
+         }
+return false;
         
-    }
-
-    private char[] rotateOnce(char[] arr){
-        char firstChar = arr[0];
-        System.arraycopy(arr,1,arr,0,arr.length-1);
-        arr[arr.length-1]=firstChar;
-        return arr;
+        
     }
 }
