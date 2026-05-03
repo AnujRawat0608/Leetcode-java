@@ -5,12 +5,10 @@ class Solution {
         int m = goal.length();
 
         if(n != m)return false;
-        for(int i = 0; i< n ; i++){
-            s = s.substring(1) + s.charAt(0);
-            if(s.contains(goal)){
-                return true;
-            }
+        if(n == m && (s + s).contains(goal)){
+            return true;
         }
+        
         return false;
         
     }
