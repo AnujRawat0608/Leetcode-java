@@ -1,35 +1,15 @@
 class Solution {
     public boolean canBeEqual(String s1, String s2) {
-        int n = s1.length();
+        // index 0 and 2
+        boolean condition1 = 
+            (s1.charAt(0) == s2.charAt(0) && s1.charAt(2) == s2.charAt(2)) ||
+            (s1.charAt(0) == s2.charAt(2) && s1.charAt(2) == s2.charAt(0));
 
-        int[] even = new int[26];
-        int[] odd = new int[26];
+        // index 1 and 3
+        boolean condition2 = 
+            (s1.charAt(1) == s2.charAt(1) && s1.charAt(3) == s2.charAt(3)) ||
+            (s1.charAt(1) == s2.charAt(3) && s1.charAt(3) == s2.charAt(1));
 
-        // Count frequencies from s1
-        for (int i = 0; i < n; i++) {
-            if (i % 2 == 0) {
-                even[s1.charAt(i) - 'a']++;
-            } else {
-                odd[s1.charAt(i) - 'a']++;
-            }
-        }
-
-        // Subtract frequencies using s2
-        for (int i = 0; i < n; i++) {
-            if (i % 2 == 0) {
-                even[s2.charAt(i) - 'a']--;
-            } else {
-                odd[s2.charAt(i) - 'a']--;
-            }
-        }
-
-        // Check if all counts are zero
-        for (int i = 0; i < 26; i++) {
-            if (even[i] != 0 || odd[i] != 0) {
-                return false;
-            }
-        }
-
-        return true;
+        return condition1 && condition2;
     }
 }
