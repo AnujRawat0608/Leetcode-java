@@ -1,57 +1,111 @@
 class Solution {
 
-    private static final int MX = 1000001;
-    private static final List<Integer>[] factors = new ArrayList[MX];
+    private boolean[] isPrime;
 
-    static {
-        for (int i = 0; i < MX; i++) factors[i] = new ArrayList<>();
-        for (int i = 2; i < MX; i++) {
-            if (factors[i].isEmpty()) {
-                for (int j = i; j < MX; j += i) factors[j].add(i);
+    private void buildSieve(int maxEl) {
+
+        isPrime = new boolean[maxEl + 1];
+        Arrays.fill(isPrime, true);
+
+        if(maxEl >= 0) isPrime[0] = false;
+        if(maxEl >= 1) isPrime[1] = false;
+
+        for(int num = 2; num * num <= maxEl; num++) {
+
+            if(isPrime[num]) {
+
+                for(int multiple = num * num;
+                    multiple <= maxEl;
+                    multiple += num) {
+
+                    isPrime[multiple] = false;
+                }
             }
         }
     }
 
     public int minJumps(int[] nums) {
+
         int n = nums.length;
-        Map<Integer, List<Integer>> edges = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            int a = nums[i];
-            if (factors[a].size() == 1) {
-                edges.computeIfAbsent(a, k -> new ArrayList<>()).add(i);
-            }
+
+        HashMap<Integer, List<Integer>> mp = new HashMap<>();
+        int maxEl = 0;
+
+        for(int i = 0; i < n; i++) {
+
+            mp.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
+
+            maxEl = Math.max(maxEl, nums[i]);
         }
-        int res = 0;
-        boolean[] seen = new boolean[n];
-        seen[n - 1] = true;
-        List<Integer> q = new ArrayList<>();
-        q.add(n - 1);
-        while (true) {
-            List<Integer> q2 = new ArrayList<>();
-            for (int i : q) {
-                if (i == 0) return res;
-                if (i > 0 && !seen[i - 1]) {
-                    seen[i - 1] = true;
-                    q2.add(i - 1);
+
+        buildSieve(maxEl);
+
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n];
+
+        queue.offer(0);
+        visited[0] = true;
+
+        HashSet<Integer> seen = new HashSet<>();
+
+        int steps = 0;
+
+        while(!queue.isEmpty()) {
+
+            int size = queue.size();
+
+            while(size-- > 0) {
+
+                int i = queue.poll();
+
+                if(i == n - 1) {
+                    return steps;
                 }
-                if (i < n - 1 && !seen[i + 1]) {
-                    seen[i + 1] = true;
-                    q2.add(i + 1);
+
+                // i - 1
+                if(i - 1 >= 0 && !visited[i - 1]) {
+
+                    queue.offer(i - 1);
+                    visited[i - 1] = true;
                 }
-                for (int p : factors[nums[i]]) {
-                    if (edges.containsKey(p)) {
-                        for (int j : edges.get(p)) {
-                            if (!seen[j]) {
-                                seen[j] = true;
-                                q2.add(j);
-                            }
+
+                // i + 1
+                if(i + 1 < n && !visited[i + 1]) {
+
+                    queue.offer(i + 1);
+                    visited[i + 1] = true;
+                }
+
+                // skip if not prime or already processed
+                if(!isPrime[nums[i]] || seen.contains(nums[i])) {
+                    continue;
+                }
+
+                // visit all multiples
+                for(int multiple = nums[i];
+                    multiple <= maxEl;
+                    multiple += nums[i]) {
+
+                    if(!mp.containsKey(multiple)) {
+                        continue;
+                    }
+
+                    for(int j : mp.get(multiple)) {
+
+                        if(!visited[j]) {
+
+                            queue.offer(j);
+                            visited[j] = true;
                         }
-                        edges.get(p).clear();
                     }
                 }
+
+                seen.add(nums[i]);
             }
-            q = q2;
-            res++;
+
+            steps++;
         }
+
+        return -1;
     }
 }
