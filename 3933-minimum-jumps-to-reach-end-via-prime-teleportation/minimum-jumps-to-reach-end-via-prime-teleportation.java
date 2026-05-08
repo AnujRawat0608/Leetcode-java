@@ -1,156 +1,57 @@
 class Solution {
 
-    static final int MAXV = 1000001;
+    private static final int MX = 1000001;
+    private static final List<Integer>[] factors = new ArrayList[MX];
 
-    static int[] spf = buildSPF();
-
-    static int[] buildSPF() {
-
-        int[] spf = new int[MAXV];
-
-        for(int i = 0; i < MAXV; i++){
-            spf[i] = i;
-        }
-
-        spf[0] = 0;
-        spf[1] = 1;
-
-        for(long i = 2; i * i < MAXV; i++){
-
-            if(spf[(int)i] == i){
-
-                for(long j = i * i; j < MAXV; j += i){
-
-                    if(spf[(int)j] == j){
-                        spf[(int)j] = (int)i;
-                    }
-                }
+    static {
+        for (int i = 0; i < MX; i++) factors[i] = new ArrayList<>();
+        for (int i = 2; i < MX; i++) {
+            if (factors[i].isEmpty()) {
+                for (int j = i; j < MX; j += i) factors[j].add(i);
             }
         }
-
-        return spf;
-    }
-
-    boolean isPrime(int x){
-
-        return x >= 2 && spf[x] == x;
     }
 
     public int minJumps(int[] nums) {
-
         int n = nums.length;
-
-        if(n == 1) return 0;
-
-        int maxi = 0;
-
-        for(int x : nums){
-            maxi = Math.max(maxi, x);
-        }
-
-        // store which prime numbers are present
-        boolean[] primeSeen = new boolean[maxi + 1];
-
-        for(int x : nums){
-
-            if(isPrime(x)){
-                primeSeen[x] = true;
+        Map<Integer, List<Integer>> edges = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int a = nums[i];
+            if (factors[a].size() == 1) {
+                edges.computeIfAbsent(a, k -> new ArrayList<>()).add(i);
             }
         }
-
-        // prime -> divisible indices
-        HashMap<Integer, ArrayList<Integer>> mp = new HashMap<>();
-
-        for(int i = 0; i < n; i++){
-
-            int x = nums[i];
-
-            if(x == 1) continue;
-
-            while(x > 1){
-
-                int p = spf[x];
-
-                if(p <= maxi && primeSeen[p]){
-
-                    mp.putIfAbsent(p, new ArrayList<>());
-                    mp.get(p).add(i);
+        int res = 0;
+        boolean[] seen = new boolean[n];
+        seen[n - 1] = true;
+        List<Integer> q = new ArrayList<>();
+        q.add(n - 1);
+        while (true) {
+            List<Integer> q2 = new ArrayList<>();
+            for (int i : q) {
+                if (i == 0) return res;
+                if (i > 0 && !seen[i - 1]) {
+                    seen[i - 1] = true;
+                    q2.add(i - 1);
                 }
-
-                while(x % p == 0){
-                    x /= p;
+                if (i < n - 1 && !seen[i + 1]) {
+                    seen[i + 1] = true;
+                    q2.add(i + 1);
                 }
-            }
-        }
-
-        int[] dist = new int[n];
-        Arrays.fill(dist, -1);
-
-        boolean[] usedPrime = new boolean[maxi + 1];
-
-        Queue<Integer> q = new LinkedList<>();
-
-        q.offer(0);
-        dist[0] = 0;
-
-        while(!q.isEmpty()){
-
-            int idx = q.poll();
-
-            if(idx == n - 1){
-                return dist[idx];
-            }
-
-            // left
-            if(idx - 1 >= 0 && dist[idx - 1] == -1){
-
-                dist[idx - 1] = dist[idx] + 1;
-                q.offer(idx - 1);
-            }
-
-            // right
-            if(idx + 1 < n && dist[idx + 1] == -1){
-
-                dist[idx + 1] = dist[idx] + 1;
-                q.offer(idx + 1);
-            }
-
-            int x = nums[idx];
-
-            // teleportation
-            if(isPrime(x) && !usedPrime[x]){
-
-                usedPrime[x] = true;
-
-                if(mp.containsKey(x)){
-
-                    for(int nextIdx : mp.get(x)){
-
-                        if(dist[nextIdx] == -1){
-
-                            dist[nextIdx] = dist[idx] + 1;
-                            q.offer(nextIdx);
+                for (int p : factors[nums[i]]) {
+                    if (edges.containsKey(p)) {
+                        for (int j : edges.get(p)) {
+                            if (!seen[j]) {
+                                seen[j] = true;
+                                q2.add(j);
+                            }
                         }
+                        edges.get(p).clear();
                     }
                 }
             }
+            q = q2;
+            res++;
         }
-
-        return -1;
     }
 }
-/*
-
-integer array nums = int[] nums;
-n = nums.length;
-start at index 0  and goal is to reach last index n-1;
-we can move forward and backward in the array
-
-if nums[i] is a prime number  i can jump to the index  such that nums[j] % p == 0;
-
-Return the minimum number of jumps required to reach index n-1;
-nums[i] % nums[i] == 0; that means a numver is prime number
-
-
-
-*/
