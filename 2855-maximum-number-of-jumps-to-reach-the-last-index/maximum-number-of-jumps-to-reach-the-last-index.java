@@ -1,27 +1,27 @@
 class Solution {
     public int maximumJumps(int[] nums, int target) {
-        
+
         int n = nums.length;
 
+        // dp[i] stores maximum jumps to reach index i
         int[] dp = new int[n];
 
+        // Mark all indices unreachable
         Arrays.fill(dp, -1);
 
-        // base case
+        // Starting index needs 0 jumps
         dp[0] = 0;
 
-        for(int i = 0; i < n; i++) {
+        for(int i = 1; i < n; i++) {
 
-            // unreachable index
-            if(dp[i] == -1) continue;
+            // Check all previous indices
+            for(int j = 0; j < i; j++) {
 
-            for(int j = i + 1; j < n; j++) {
+                // Valid jump and previous index reachable
+                if(Math.abs(nums[i] - nums[j]) <= target && dp[j] != -1) {
 
-                long diff = 1L * nums[j] - nums[i];
-
-                if(-target <= diff && diff <= target) {
-
-                    dp[j] = Math.max(dp[j], dp[i] + 1);
+                    // Update maximum jumps
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
         }
