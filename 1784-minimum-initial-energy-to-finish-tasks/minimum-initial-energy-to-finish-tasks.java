@@ -1,49 +1,47 @@
+import java.util.*;
+
 class Solution {
-
-    public boolean isPossible(int[][] tasks, int mid) {
-
-        for(int[] task : tasks) {
-            int actual  = task[0];
-            int minimum = task[1];
-
-            if(minimum > mid) {
-                return false;
-            }
-
-            mid -= actual;
-        }
-
-        return true;
-    }
 
     public int minimumEffort(int[][] tasks) {
 
-        int n = tasks.length;
+        // Sort by (minimum - actual) descending
+        Arrays.sort(tasks, (a, b) -> 
+            (b[1] - b[0]) - (a[1] - a[0])
+        );
 
-        int l = 0;
-        int r = (int)1e9;
+        int low = 1;
+        int high = (int)1e9;
 
-        int result = Integer.MAX_VALUE;
+        while (low < high) {
 
-        Arrays.sort(tasks, (task1, task2) -> {
-            int diff1 = task1[1] - task1[0];
-            int diff2 = task2[1] - task2[0];
+            int mid = low + (high - low) / 2;
 
-            return diff2 - diff1;
-        });
-
-        while(l <= r) {
-
-            int mid = l + (r-l)/2;
-
-            if(isPossible(tasks, mid)) {
-                result = mid;
-                r = mid-1;
+            if (canFinish(tasks, mid)) {
+                high = mid;
             } else {
-                l = mid+1;
+                low = mid + 1;
             }
         }
 
-        return result;
+        return low;
+    }
+
+    private boolean canFinish(int[][] tasks, int energy) {
+
+        for (int[] task : tasks) {
+
+            int actual = task[0];
+            int minimum = task[1];
+
+            // Cannot start this task
+            if (energy < minimum) {
+                return false;
+            }
+
+            // Spend energy
+            energy -= actual;
+        }
+
+        return true;
     }
 }
