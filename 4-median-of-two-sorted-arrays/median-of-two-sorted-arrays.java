@@ -6,10 +6,10 @@ class Solution {
 
         int[] mergedArray = new int[m+n];
 
-        int i = 0;
-        int j = 0;
-        int k = 0;
-
+        int i=0; 
+        int j=0;
+        int k=0;
+        
         while(i < m && j < n){
             if(nums1[i] < nums2[j]){
                 mergedArray[k++] = nums1[i++];
@@ -17,20 +17,18 @@ class Solution {
                 mergedArray[k++] = nums2[j++];
             }
         }
-        while( i < m){
+        while(i<m){
             mergedArray[k++] = nums1[i++];
         }
-        while( j < n){
+        while(j<n){
             mergedArray[k++] = nums2[j++];
         }
-
-        int totalLength = m + n;
+        int totalLength = m+n;
         if(totalLength % 2 == 0){
-            return(mergedArray[totalLength / 2 - 1] + mergedArray[totalLength / 2]) / 2.0;
+            return(mergedArray[totalLength / 2 - 1] + mergedArray[totalLength / 2]) /2.0;
         }else{
-            return mergedArray[totalLength / 2];
+            return mergedArray[totalLength/2];
         }
-
         
     }
 }
