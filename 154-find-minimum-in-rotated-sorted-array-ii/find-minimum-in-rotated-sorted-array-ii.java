@@ -1,36 +1,33 @@
 class Solution {
     public int findMin(int[] nums) {
-        int l = 0;
-        int r = nums.length - 1;
+        int n = nums.length;
 
-        int resultIdx = 0;
+        int left = 0;
+        int right = n-1;
 
-        while (l <= r) {
+        int resultIdx = 0; 
 
-            // remove duplicates from left
-            while (l < r && nums[l] == nums[l + 1])
-                l++;
+        while(left <= right){
+            while(left < right && nums[left] == nums[left+1]){
+                left++;
+            }
+            while(left < right &&  nums[right] == nums[right-1]){
+                right--;
+            }
 
-            // remove duplicates from right
-            while (l < r && nums[r] == nums[r - 1])
-                r--;
+            int mid = left+(right-left)/2;
 
-            int mid = l + (r - l) / 2;
-
-            // update answer
-            if (nums[mid] < nums[resultIdx])
+            if(nums[mid] < nums[resultIdx]){
                 resultIdx = mid;
-
-            // minimum lies on right side
-            if (nums[mid] > nums[r]) {
-                l = mid + 1;
             }
-            // minimum can be on left side
-            else {
-                r = mid - 1;
-            }
+            if(nums[mid] >  nums[right]){
+                left = mid + 1;
+            }else{
+                right = mid - 1;
+            } 
         }
-
         return nums[resultIdx];
+
     }
 }
+
