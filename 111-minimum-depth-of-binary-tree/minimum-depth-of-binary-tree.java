@@ -16,32 +16,31 @@
 class Solution {
     public int minDepth(TreeNode root) {
 
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
 
-        if(root == null)return 0;
+        Queue<TreeNode> queue = new LinkedList<>();//create Queue
+        queue.add(root);//add teh root  elemnent in the queue
 
-        int depth =1;
-        while(!queue.isEmpty()){
-            int size  = queue.size();
+        if(root == null)return 0;//if root == null return 0
 
-            for(int i=0; i<size;i++){
-                TreeNode curr = queue.poll();
+        int depth = 1; // take a variable depth to keep track of the depth
+        while(!queue.isEmpty()){ //this will run untill the queue gets empty
+            int size = queue.size();//this is the variable in which we store size of the queue
 
-                //Leaf node found
-                if(curr.left == null && curr.right == null){
+            for(int i=0; i<size; i++){//we are now iterating in the Queue
+                TreeNode curr = queue.poll();//we remove the top element from the queue and store it in curr node 
+
+                if(curr.left == null && curr.right == null){//if left and right of the curr are null then return the depth
                     return depth;
                 }
-                if(curr.left != null){
+                if(curr.left != null){ // if left of curr is not null then add it into the queue
                     queue.add(curr.left);
                 }
-                if(curr.right != null){
+                if(curr.right != null){ // if right of curr is not null then add it to the queue
                     queue.add(curr.right);
                 }
             }
-            depth++;
+            depth ++; // add the depth accordingly
         }
-        return depth;
-        
+        return depth; // return the depth
     }
 }
