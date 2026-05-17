@@ -15,27 +15,36 @@
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-       List<List<Integer>> result = new ArrayList<>();
-        if (root == null) return result;  // Handle empty tree
+        List<List<Integer>> result = new ArrayList<>();
 
-        Queue<TreeNode> treeNodeQueue = new LinkedList<>();
-        treeNodeQueue.add(root);
+        if(root == null){
+            return result;
+        }
 
-        while (!treeNodeQueue.isEmpty()) {
-            int levelSize = treeNodeQueue.size();  // Number of nodes in current level
-            List<Integer> currentLevel = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
 
-            for (int i = 0; i < levelSize; i++) {
-                TreeNode treeNode = treeNodeQueue.poll();  // Use poll() instead of pop()
-                currentLevel.add(treeNode.val);
+        while(!queue.isEmpty()){
 
-                if (treeNode.left != null)
-                    treeNodeQueue.add(treeNode.left);
-                if (treeNode.right != null)
-                    treeNodeQueue.add(treeNode.right);
+            int size = queue.size();
+
+            List<Integer> level = new ArrayList<>();
+
+            for(int i= 0; i< size; i++){
+                TreeNode curr = queue.poll();
+                level.add(curr.val);
+                
+                if(curr.left != null){
+                    queue.add(curr.left);
+                }
+                if(curr.right != null){
+                    queue.add(curr.right);
+                }
+
             }
-            result.add(currentLevel);
+            result.add(level);
         }
         return result;
+        
     }
 }
