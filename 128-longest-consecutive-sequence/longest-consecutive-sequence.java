@@ -5,20 +5,22 @@ class Solution {
             set.add(num);
         }
         int longest = 0;
-        for(int  num : set){
+        for(int num : set){
             if(!set.contains(num - 1)){
                 int count = 1;
-                int currentnum = num;
+                int currnum = num;
             
-
-            while(set.contains(currentnum + 1)){
-                currentnum ++;
+            while(set.contains(currnum + 1)){
                 count ++;
+                currnum ++;
+            
             }
-            longest = Math.max(longest,count);
+            
+ longest = Math.max(longest,count);
         }
+       
+        
     }
     return longest;
-
-    }
+}
 }
