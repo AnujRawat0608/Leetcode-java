@@ -1,28 +1,16 @@
 class Solution {
-int[] dp;
-public boolean solve(int[] nums, int n, int idx){
-    if(idx >= n-1){
-        return true;
-    }
-    if(dp[idx] != -1){
-        return dp[idx] == 1;
-    }
-    for(int i=1; i<= nums[idx]; i++){
-        if(solve(nums, n, idx+i)){
-            dp[idx] =1;
-            return true;
-        }
-    }
-    dp[idx] = 0;
-    return false;
-}
-
     public boolean canJump(int[] nums) {
 
         int n = nums.length;
-        dp = new int[n];
-        Arrays.fill(dp,-1);
-        return solve(nums,n,0);
+        int maxReachable = 0;
+
+        for(int i=0; i<n; i++){
+            if(i > maxReachable){
+                return false;
+            }
+            maxReachable = Math.max(maxReachable, i + nums[i]);
+        }
+        return true;
         
     }
 }
