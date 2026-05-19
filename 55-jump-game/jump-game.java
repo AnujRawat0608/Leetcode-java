@@ -1,15 +1,27 @@
 class Solution {
-    public boolean canJump(int[] nums) {
-        int maxReach = 0;
-        int n = nums.length;
-        for(int i=0; i<n; i++){
-            if(i > maxReach){
-                return false;
-            }
-            maxReach = Math.max(maxReach, i+nums[i]);
-            if(maxReach > nums.length-1)return true;   
+    int[] dp;
+    public boolean solve(int[] nums, int n , int idx){
+        if(idx >= n-1){
+            return true;
         }
-        return true;
+        if(dp[idx] != -1){
+            return dp[idx] == 1;
+        }
+
+        for(int i = 1; i<= nums[idx]; i++){
+            if(solve(nums, n, idx+i)){
+                dp[idx] = 1;
+                return true;
+            }
+        }
+        dp[idx] = 0;
+        return false;
+    }
+    public boolean canJump(int[] nums) {
+        int n = nums.length;
+        dp = new int[n];
+        Arrays.fill(dp,-1);
+        return solve(nums,n,0);
         
     }
 }
