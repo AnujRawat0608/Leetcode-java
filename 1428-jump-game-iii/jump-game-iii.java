@@ -1,34 +1,22 @@
 class Solution {
-
-    public boolean canReach(int[] arr, int start) {
-
-        boolean[] visited = new boolean[arr.length];
-
-        return dfs(arr, start, visited);
-    }
-
-    public boolean dfs(int[] arr, int idx, boolean[] visited) {
-
-        // Out of bounds
-        if (idx < 0 || idx >= arr.length) {
+    int n ;
+    public boolean solve(int[]arr, int i){
+        if(i < 0 || i >= n || arr[i] < 0){
             return false;
         }
-
-        // Already visited
-        if (visited[idx]) {
-            return false;
-        }
-
-        // Found zero
-        if (arr[idx] == 0) {
+        if(arr[i] == 0){
             return true;
         }
+        int val = arr[i];
+        arr[i]  = -1;
+        boolean left = solve(arr,i+ val);
+        boolean right = solve(arr, i-val);
 
-        // Mark visited
-        visited[idx] = true;
-
-        // Explore both directions
-        return dfs(arr, idx + arr[idx], visited) ||
-               dfs(arr, idx - arr[idx], visited);
+        return left || right;
+    }
+    public boolean canReach(int[] arr, int start) {
+       n = arr.length;
+        return solve(arr,start);
+        
     }
 }
