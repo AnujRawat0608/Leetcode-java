@@ -1,28 +1,19 @@
 class Solution {
-    int dp[];
-
-    public int solve(int[]nums, int n , int idx){
-        if(idx >= n-1){
-            return 0;
-        }
-        if(dp[idx] != -1){
-            return dp[idx];
-        }
-        int minJumps = Integer.MAX_VALUE;
-        for(int i =1; i<= nums[idx]; i++){
-            int ans = solve(nums, n ,idx +i);
-            if(ans != Integer.MAX_VALUE){
-                minJumps = Math.min(minJumps, 1+ans);
-            }
-        }
-        dp[idx] = minJumps;
-        return dp[idx];
-    }
     public int jump(int[] nums) {
-        int n = nums.length;
-        dp = new int[n];
-        Arrays.fill(dp,-1);
-        return solve(nums,n,0);
+        int left = 0;
+        int right = 0; 
+        int jumps = 0; 
+
+        while(right < nums.length -1){
+            int far = 0;
+            for(int i = left ; i<= right; i++){
+                far = Math.max(far,i+nums[i]);
+            }
+            left = right +1;
+            right = far;
+            jumps++;
+        }
+        return jumps;
         
     }
 }
