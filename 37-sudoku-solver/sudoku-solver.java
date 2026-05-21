@@ -7,12 +7,12 @@ class Solution {
 
           for (char c = '1'; c <= '9'; c++) {
             if (isValid(board, i, j, c)) {
-              board[i][j] = c;
+              board[i][j] = c; //do
 
-              if (solveSudoku(board))
+              if (solveSudoku(board))//explore
                 return true;
               else
-                board[i][j] = '.';
+                board[i][j] = '.'; //undo
             }
           }
 
