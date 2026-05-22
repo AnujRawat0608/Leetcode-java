@@ -1,28 +1,22 @@
 class Solution {
-    int n;
+    int n ;
     public int numTilePossibilities(String tiles) {
         n = tiles.length();
         boolean[] used = new boolean[n];
-        Set<String> result = new HashSet<>();
         StringBuilder curr = new StringBuilder();
-
-        solve(tiles,used,result,curr);
-        return result.size()-1;
+        Set<String> result = new HashSet<>();
+        solve(tiles,used,curr,result);
+        return result.size() - 1;
     }
-    public void solve(String tiles, boolean[] used, Set<String> result, StringBuilder curr){
+    public void solve(String tiles, boolean[] used, StringBuilder curr, Set<String> result){
         result.add(curr.toString());
-        for(int i=0; i<n ;i ++){
-            if(used[i]) continue;
+        for(int i=0; i<n ; i++){
+            if(used[i])continue;
             curr.append(tiles.charAt(i));
             used[i] = true;
-            solve(tiles,used,result,curr);
+            solve(tiles,used,curr,result);
             used[i] = false;
-            curr.deleteCharAt(curr.length() -1 );
+            curr.deleteCharAt(curr.length() - 1);
         }
     }
 }
-/*
-AAB
-A,B,AA,AB,BA,AAB,BAA,,ABA
-
-*/
