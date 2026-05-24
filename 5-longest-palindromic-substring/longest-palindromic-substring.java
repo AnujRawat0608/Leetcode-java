@@ -5,7 +5,7 @@ class Solution {
 
         for(int i=0; i<n; i++){
             for(int j=i; j<n; j++){
-                String sub = s.substring(i,j+1);
+                String sub = s.substring(i, j+1);
                 if(isPalindrome(sub)){
                     if(sub.length() > result.length()){
                         result = sub;
