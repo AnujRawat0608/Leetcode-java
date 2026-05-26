@@ -14,20 +14,19 @@
  * }
  */
 class Solution {
-    List<Integer> vals;
     public boolean isUnivalTree(TreeNode root) {
-        vals = new ArrayList();
-        dfs(root);
-        for(int v : vals)
-            if(v != vals.get(0))return false;
+        return dfs(root, root.val);
+    }
+
+    private boolean dfs(TreeNode node, int value) {
+        if (node == null) {
             return true;
         }
-        public void dfs(TreeNode node){
-            if(node != null){
-                vals.add(node.val);
-                dfs(node.left);
-                dfs(node.right);
-            
+
+        if (node.val != value) {
+            return false;
         }
+
+        return dfs(node.left, value) && dfs(node.right, value);
     }
 }
