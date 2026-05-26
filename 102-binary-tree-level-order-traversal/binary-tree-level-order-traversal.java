@@ -16,7 +16,6 @@
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
-
         if(root == null){
             return result;
         }
@@ -36,10 +35,9 @@ class Solution {
                 if(curr.right != null){
                     queue.add(curr.right);
                 }
-            }
-            result.add(level);
         }
+        result.add(level);
+    }
         return result;
-        
     }
 }
