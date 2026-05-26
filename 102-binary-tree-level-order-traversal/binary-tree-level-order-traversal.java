@@ -27,6 +27,7 @@ class Solution {
             for(int i=0; i<size; i++){
                 TreeNode curr = queue.poll();
                 level.add(curr.val);
+
                 if(curr.left != null){
                     queue.add(curr.left);
                 }
@@ -37,5 +38,6 @@ class Solution {
             result.add(level);
         }
         return result;
+        
     }
 }
