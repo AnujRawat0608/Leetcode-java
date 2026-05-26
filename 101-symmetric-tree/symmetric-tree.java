@@ -15,9 +15,8 @@
  */
 class Solution {
     public boolean isSymmetric(TreeNode root) {
-        if(root == null) return true;
+        if(root == null)return true;
         Queue<TreeNode> queue = new LinkedList<>();
-
         queue.add(root.left);
         queue.add(root.right);
 
@@ -33,10 +32,10 @@ class Solution {
             }
             queue.add(left.left);
             queue.add(right.right);
-
             queue.add(left.right);
             queue.add(right.left);
         }
         return true;
+        
     }
 }
