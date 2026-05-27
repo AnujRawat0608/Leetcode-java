@@ -1,26 +1,39 @@
-// Added using AI
 class Solution {
     public int numberOfSpecialChars(String word) {
-        int[] mpl = new int[26];
-        int[] mpu = new int[26];
-        Arrays.fill(mpl, -1) ;
-        Arrays.fill(mpu, -1);
-        int n = word.length();
-        for (int i = 0; i < n; i++) {
-            char a = word.charAt(i);
-            if (Character.isLowerCase(a)) {
-                mpl[a - 'a'] = i ;
+        int[] lastLower = new int[26];
+        int[] firstUpper = new int[26];
+
+        // initialize
+        Arrays.fill(lastLower, -1);
+        Arrays.fill(firstUpper, -1);
+
+        // store:
+        // last occurrence of lowercase
+        // first occurrence of uppercase
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+
+            if (Character.isLowerCase(ch)) {
+                lastLower[ch - 'a'] = i;
             } else {
-                int idx = a - 'A';
-                if (mpu[idx] == -1)
-                    mpu[idx] = i;
+                if (firstUpper[ch - 'A'] == -1) {
+                    firstUpper[ch - 'A'] = i;
+                }
             }
         }
-        int ans = 0;
+
+        int count = 0;
+
+        // check condition
         for (int i = 0; i < 26; i++) {
-            if (mpl[i] != -1 && mpu[i] != -1 && mpl[i] < mpu[i])
-                ans++ ;
+            if (lastLower[i] != -1 &&
+                firstUpper[i] != -1 &&
+                lastLower[i] < firstUpper[i]) {
+
+                count++;
+            }
         }
-        return ans;
+
+        return count;
     }
 }
