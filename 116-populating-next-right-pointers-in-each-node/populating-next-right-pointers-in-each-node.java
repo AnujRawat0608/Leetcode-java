@@ -25,6 +25,7 @@ class Solution {
     public Node connect(Node root) {
         if(root == null)return null;
         Node leftmost = root;
+
         while(leftmost.left != null){
             Node curr = leftmost;
 
@@ -38,6 +39,6 @@ class Solution {
             leftmost = leftmost.left;
         }
         return root;
-        
+
     }
 }
