@@ -28,9 +28,9 @@ class Solution {
 
         while(leftmost.left != null){
             Node curr = leftmost;
-
             while(curr != null){
                 curr.left.next = curr.right;
+
                 if(curr.next != null){
                     curr.right.next = curr.next.left;
                 }
@@ -39,6 +39,6 @@ class Solution {
             leftmost = leftmost.left;
         }
         return root;
-
+        
     }
 }
