@@ -1,91 +1,76 @@
 class Solution {
+    int[] segmentTree;
+    int n = 50000;
 
-    private final int MAXX = 50000;
-    private int[] seg;
+    void constructSegmentTree() {
+        segmentTree = new int[4 * n];
+    }
 
-    private void update(int node, int l, int r, int idx, int val) {
-        if (l == r) {
-            seg[node] = val;
+    void updateSegTree(int idx, int val, int i, int l, int r) {
+        if(l == r) {
+            segmentTree[i] = val;
             return;
         }
 
-        int mid = (l + r) / 2;
+        int mid = l + (r - l) / 2;
 
-        if (idx <= mid)
-            update(2 * node, l, mid, idx, val);
-        else
-            update(2 * node + 1, mid + 1, r, idx, val);
+        if(idx <= mid) {
+            updateSegTree(idx, val, 2*i+1, l, mid);
+        } else {
+            updateSegTree(idx, val, 2*i+2, mid+1, r);
+        }
 
-        seg[node] = Math.max(seg[2 * node], seg[2 * node + 1]);
+        segmentTree[i] = Math.max(segmentTree[2*i+1], segmentTree[2*i+2]);
     }
 
-    private int query(int node, int l, int r, int ql, int qr) {
-        if (ql > r || qr < l)
+    int querySegTree(int start, int end, int i, int l, int r) {
+        if(l > end || r < start) {
             return 0;
+        }
 
-        if (ql <= l && r <= qr)
-            return seg[node];
+        if(l >= start && r <= end) {
+            return segmentTree[i];
+        }
 
-        int mid = (l + r) / 2;
+        int mid = l + (r - l) / 2;
 
-        return Math.max(
-            query(2 * node, l, mid, ql, qr),
-            query(2 * node + 1, mid + 1, r, ql, qr)
-        );
+        return Math.max(querySegTree(start, end, 2*i+1, l, mid),
+                        querySegTree(start, end, 2*i+2, mid+1, r));
     }
 
     public List<Boolean> getResults(int[][] queries) {
+        constructSegmentTree();
 
-        seg = new int[4 * (MAXX + 1)];
+        TreeSet<Integer> st = new TreeSet<>();
+        st.add(0);
 
-        TreeSet<Integer> obstacles = new TreeSet<>();
-        obstacles.add(0);
+        List<Boolean> result = new ArrayList<>();
 
-        for (int[] q : queries) {
-            if (q[0] == 1) obstacles.add(q[1]);
-        }
+        for(int[] query : queries) {
+            if(query[0] == 1) {
+                int x = query[1];
 
-        List<Integer> pos = new ArrayList<>(obstacles);
+                Integer nxtVal = st.higher(x);
+                int nxt = (nxtVal != null) ? nxtVal : -1;
+                int pre = st.lower(x) != null ? st.lower(x) : st.floor(x);
 
-        for (int i = 1; i < pos.size(); i++) {
-            update(1,0,MAXX,pos.get(i),pos.get(i) - pos.get(i - 1));
-        }
+                updateSegTree(x, x - pre, 0, 0, n - 1);
+                if(nxt != -1) updateSegTree(nxt, nxt - x, 0, 0, n - 1);
 
-        List<Boolean> ans = new ArrayList<>();
+                st.add(x);
+            } else {
+                int x = query[1];
+                int sz = query[2];
 
-        for (int i = queries.length - 1; i >= 0; i--) {
+                int pre = st.floor(x);
 
-            if (queries[i][0] == 2) {
+                int maxGap = querySegTree(0, pre, 0, 0, n - 1);
+                int best = Math.max(maxGap, x - pre);
 
-                int x = queries[i][1];
-                int sz = queries[i][2];
-
-                int prevObstacle = obstacles.floor(x);
-
-                int best = query(1, 0,MAXX,0,prevObstacle);
-                best = Math.max(best, x - prevObstacle);
-
-                ans.add(best >= sz);
-            }
-            else {
-
-                int x = queries[i][1];
-
-                Integer leftPos = obstacles.lower(x);
-
-                update(1,0,MAXX,x,0);
-
-                Integer rightPos = obstacles.higher(x);
-
-                if (rightPos != null) {
-                    update(1,0,MAXX,rightPos,rightPos - leftPos);
-                }
-
-                obstacles.remove(x);
+                result.add(best >= sz);
             }
         }
 
-        Collections.reverse(ans);
-        return ans;
+        return result;
     }
 }
