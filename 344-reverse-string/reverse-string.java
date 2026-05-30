@@ -1,16 +1,14 @@
 class Solution {
     public void reverseString(char[] s) {
-        int left = 0;
-        int right = s.length-1;
+        reverse(s,0,s.length-1);
+    }
+    private void reverse(char[] s, int left,int right){
 
-        while(left < right){
+        if(left >= right)return;
             char temp = s[left];
             s[left] = s[right];
             s[right] = temp;
-            left++;
-            right --;
-
-        }
+            reverse(s,left+1,right-1);
         
     }
 }
