@@ -5,9 +5,9 @@ class Solution {
 
         long currentmass = mass;
         
-        for(int i=0; i<n; i++){
-            if(currentmass >= asteroids[i]){
-                currentmass += asteroids[i];
+        for(int m : asteroids){
+            if(currentmass >= m){
+                currentmass += m;
             }else{
                 return false;
             }
