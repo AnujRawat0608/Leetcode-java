@@ -1,49 +1,43 @@
 class Solution {
-
-    private boolean dfs(int node,
-                        int destination,
-                        List<List<Integer>> graph,
-                        boolean[] visited) {
-
-        if (node == destination) {
-            return true;
-        }
-
-        visited[node] = true;
-
-        for (int neighbor : graph.get(node)) {
-
-            if (!visited[neighbor]) {
-
-                if (dfs(neighbor, destination, graph, visited)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public boolean validPath(int n,
                              int[][] edges,
                              int source,
                              int destination) {
 
-        // Create adjacency list
         List<List<Integer>> graph = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             graph.add(new ArrayList<>());
         }
 
-        // Add edges
         for (int[] edge : edges) {
             graph.get(edge[0]).add(edge[1]);
             graph.get(edge[1]).add(edge[0]);
         }
 
+        Queue<Integer> queue = new LinkedList<>();
         boolean[] visited = new boolean[n];
 
-        return dfs(source, destination, graph, visited);
+        queue.offer(source);
+        visited[source] = true;
+
+        while (!queue.isEmpty()) {
+
+            int node = queue.poll();
+
+            if (node == destination) {
+                return true;
+            }
+
+            for (int neighbor : graph.get(node)) {
+
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        return false;
     }
 }
