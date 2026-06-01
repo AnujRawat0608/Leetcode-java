@@ -20,8 +20,8 @@ class Solution {
 
         sum += root.val;
         if(root.left == null && root.right == null){
-            if(sum == targetSum)
-            return true;
+            return (sum == targetSum);
+        
         }
         boolean left = inOrder(root.left,sum,targetSum);
         boolean right = inOrder(root.right,sum,targetSum);
