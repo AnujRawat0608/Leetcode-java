@@ -31,12 +31,11 @@ class Solution {
             if(currentSum == targetSum){
                 result.add(new ArrayList<>(currPath));
             }
-            currPath.remove(currPath.size() -1);
-            return;
-        }
+            
+        }else{
         findPaths(node.left,targetSum,currentSum,currPath,result);
         findPaths(node.right,targetSum,currentSum,currPath,result);
-
+        }
         currPath.remove(currPath.size() -1);
     }
 }
