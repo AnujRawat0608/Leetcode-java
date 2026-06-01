@@ -14,24 +14,21 @@
  * }
  */
 class Solution {
-    private boolean inOrder(TreeNode root,int sum, int targetSum){
-        if(root == null)
-        return false;
-
+    private boolean inorder(TreeNode root , int sum , int targetSum){
+        if(root == null){
+            return false;
+        }
         sum += root.val;
         if(root.left == null && root.right == null){
-            if (sum == targetSum)
-            return true;
-        
+            return sum == targetSum;
         }
-        boolean left = inOrder(root.left,sum,targetSum);
-        boolean right = inOrder(root.right,sum,targetSum);
+        
+        boolean left = inorder(root.left,sum,targetSum);
+        boolean right = inorder(root.right, sum, targetSum);
 
         return left || right;
     }
     public boolean hasPathSum(TreeNode root, int targetSum) {
-        int sum =0;
-        boolean result = inOrder(root,sum,targetSum);
-        return result;
+        return inorder(root,0,targetSum);
     }
 }
