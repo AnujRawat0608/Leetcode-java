@@ -14,11 +14,10 @@
  * }
  */
 class Solution {
+    TreeNode first = null;
+    TreeNode second = null;
+    TreeNode prev = null;
 
-    TreeNode first  =  null;
-    TreeNode second =  null;
-    TreeNode prev   =  null;
-    
     private void inorder(TreeNode root){
         if(root == null){
             return;
@@ -30,9 +29,9 @@ class Solution {
             }
             second = root;
         }
-        prev = root;
-        inorder(root.right);
-    }
+            prev = root;
+            inorder(root.right);
+        }
     public void recoverTree(TreeNode root) {
         inorder(root);
         int temp = first.val;
