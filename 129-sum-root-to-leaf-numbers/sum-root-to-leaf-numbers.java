@@ -14,7 +14,7 @@
  * }
  */
 class Solution {
-    private int dfs(TreeNode root , int curr){
+    private int dfs(TreeNode root, int curr){
         if(root == null){
             return 0;
         }
@@ -22,10 +22,9 @@ class Solution {
         if(root.left == null && root.right == null){
             return curr;
         }
-        return dfs(root.left, curr) + dfs(root.right,curr);
+        return dfs(root.left,curr) + dfs(root.right , curr);
     }
     public int sumNumbers(TreeNode root) {
         return dfs(root,0);
-        
     }
 }
