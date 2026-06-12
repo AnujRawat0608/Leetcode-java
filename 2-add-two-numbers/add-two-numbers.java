@@ -9,29 +9,27 @@
  * }
  */
 class Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        return solve(l1,l2,0);
-    }
-    private ListNode solve(ListNode l1, ListNode l2, int carry){
-        if(l1 == null && l2 == null && carry == 0){
-            return null;
-        } 
-        int sum = carry;
-        if(l1 != null){
-            sum += l1.val;
-            l1 = l1.next;
-        }
-        if(l2 != null){
-            sum += l2.val;
-            l2 = l2.next;
-        }
-        carry = sum / 10;
-        int digit = sum % 10;
+  public ListNode resList = new ListNode(0);
+public ListNode head = resList;
+public int carry = 0;
 
-        ListNode node = new ListNode(digit);
-        node.next = solve(l1,l2,carry);
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) { 
+    int sum = l1.val + l2.val + carry;
+    carry  = sum / 10;
+    resList.next = new ListNode(sum % 10);
+    resList = resList.next;
 
-        return node;
-    }
-
+    if(l1.next != null && l2.next != null)
+        addTwoNumbers(l1.next, l2.next);  
+    else if (l1.next != null)
+        addTwoNumbers(l1.next, new ListNode(0)); 
+    else if (l2.next != null)
+        addTwoNumbers(new ListNode(0), l2.next);   
+    else if (carry > 0)
+    {
+        resList.next = new ListNode(1);
+        resList = resList.next;
+    }     
+    return head.next;
+}
 }
