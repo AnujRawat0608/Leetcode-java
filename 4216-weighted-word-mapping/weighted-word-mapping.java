@@ -3,19 +3,13 @@ class Solution {
         StringBuilder answer = new StringBuilder();
 
         for (String word : words) {
-            int totalWeight = 0;
+            int sum = 0;
 
-            // Calculate weight of current word
             for (char ch : word.toCharArray()) {
-                int alphabetIndex = ch - 'a';
-                totalWeight += weights[alphabetIndex];
+                sum += weights[ch - 'a'];
             }
 
-            // Find mapped character
-            int remainder = totalWeight % 26;
-            char mappedCharacter = (char) ('z' - remainder);
-
-            answer.append(mappedCharacter);
+            answer.append((char) ('z' - (sum % 26)));
         }
 
         return answer.toString();
