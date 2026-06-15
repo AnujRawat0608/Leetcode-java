@@ -10,29 +10,20 @@
  */
 class Solution {
     public ListNode deleteMiddle(ListNode head) {
-        ListNode prevSlow = null;
-        ListNode  slow = head;
-        ListNode  fast = head;
-
+        if(head.next == null){
+            return null;
+        }
+        ListNode prevslow = null;
+        ListNode slow = head;
+        ListNode fast= head;
 
         while(fast != null && fast.next != null){
-            prevSlow = slow;
+            prevslow = slow;
             slow = slow.next;
             fast = fast.next.next;
         }
-        if(prevSlow  == null){
-            return null;
-        }
-        prevSlow.next = slow.next;
-        return head; 
-        }
-    
+        prevslow.next = slow.next;
+        return head;
+        
+    }
 }
-/*
-
-given -  head of a linked list
-To do -  delete the middle node and return the head of the mofified linked list
-middle node = n / 2
-
-
-*/
