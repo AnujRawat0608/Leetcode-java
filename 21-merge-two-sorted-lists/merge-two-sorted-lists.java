@@ -10,9 +10,9 @@
  */
 class Solution {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
- 
-        if(list1 == null)return list2;
-        if(list2 == null)return list1;
+        
+        if(list1 == null) return list2;
+        if(list2 == null) return list1;
 
         ListNode result = new ListNode();
 
@@ -20,10 +20,10 @@ class Solution {
             result = list1;
             result.next = mergeTwoLists(list1.next,list2);
         } 
-            else{
-                result = list2;
-                result.next = mergeTwoLists(list1, list2.next);
-            }
+        else{
+            result = list2;
+            result.next = mergeTwoLists(list1,list2.next);
+        }
         return result;
     }
 }
