@@ -9,7 +9,7 @@ class Solution {
                 bought ++;
                 coins -= costs[i] ;
             }else{
-                continue;
+                break;
             }
 
         }
