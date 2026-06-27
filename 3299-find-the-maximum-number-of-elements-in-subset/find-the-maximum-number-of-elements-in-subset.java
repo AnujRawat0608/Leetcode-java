@@ -1,45 +1,31 @@
- // AI generated 
-class Solution {
+public class Solution {
     public int maximumLength(int[] nums) {
-        HashMap<Integer,Integer> mp = new HashMap<>();
-
-        for(int x:nums)
-            mp.put(x,mp.getOrDefault(x,0)+1);
-
-        int ans=1;
-
-        for(int x:nums){
-            if(x==1){
-                if(mp.get(x)%2!=0)
-                    ans=Math.max(ans,mp.get(x));
-                else
-                    ans=Math.max(ans,mp.get(x)-1);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.merge(num, 1, Integer::sum);
+        }
+        int ans = map.getOrDefault(1, 1);
+        if (ans % 2 == 0) {
+            ans--;
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getKey() == 1) {
+                continue;
             }
-            else{
-                int ct=0;
-
-                if(mp.get(x)>=2){
-                    long curr=x;
-
-                    while(curr<=Integer.MAX_VALUE&&mp.containsKey((int)curr)){
-                        if(mp.get((int)curr)==1){
-                            ct++;
-                            break;
-                        }
-
-                        ct++;
-
-                        if(curr>Long.MAX_VALUE/curr)
-                            break;
-
-                        curr*=curr;
-                    }
+            if (entry.getValue() >= 2) {
+                int c = 1;
+                long a = entry.getKey();
+                a *= a;
+                while (a < Integer.MAX_VALUE && map.getOrDefault((int) a, 0) >= 2) {
+                    a *= a;
+                    c++;
                 }
-
-                ans=Math.max(ans,ct*2-1);
+                if (a < Integer.MAX_VALUE && map.getOrDefault((int) a, 0) == 1) {
+                    c++;
+                }
+                ans = Math.max(ans, 2 * c - 1);
             }
         }
-
         return ans;
     }
 }
