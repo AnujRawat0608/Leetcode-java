@@ -1,30 +1,45 @@
+ // AI generated 
 class Solution {
-    private static final int MAX_BASE = 31622;
-
     public int maximumLength(int[] nums) {
-        Map<Integer, Integer> freq = new HashMap<>();
-        for (int n : nums)
-            freq.merge(n, 1, Integer::sum);
+        HashMap<Integer,Integer> mp = new HashMap<>();
 
-        int one = freq.getOrDefault(1, 0);
-        int res = (one - 1) | 1;
-        freq.remove(1);
+        for(int x:nums)
+            mp.put(x,mp.getOrDefault(x,0)+1);
 
-        for (int f : freq.keySet()) {
-            int sq = (int) Math.sqrt(f);
-            if (sq * sq == f && freq.getOrDefault(sq, 0) > 1)
-                continue;
+        int ans=1;
 
-            int n = 0, x = f;
-
-            while (x < 31623 && freq.containsKey(x) && freq.get(x) > 1) {
-                n += 2;
-                x *= x;
+        for(int x:nums){
+            if(x==1){
+                if(mp.get(x)%2!=0)
+                    ans=Math.max(ans,mp.get(x));
+                else
+                    ans=Math.max(ans,mp.get(x)-1);
             }
+            else{
+                int ct=0;
 
-            res = Math.max(res, n + (freq.containsKey(x) ? 1 : -1));
+                if(mp.get(x)>=2){
+                    long curr=x;
+
+                    while(curr<=Integer.MAX_VALUE&&mp.containsKey((int)curr)){
+                        if(mp.get((int)curr)==1){
+                            ct++;
+                            break;
+                        }
+
+                        ct++;
+
+                        if(curr>Long.MAX_VALUE/curr)
+                            break;
+
+                        curr*=curr;
+                    }
+                }
+
+                ans=Math.max(ans,ct*2-1);
+            }
         }
 
-        return res;
+        return ans;
     }
 }
