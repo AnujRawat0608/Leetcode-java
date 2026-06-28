@@ -1,17 +1,15 @@
 class Solution {
-    private static final int[] freq = new int[100005];
-    public int maximumElementAfterDecrementingAndRearranging(int[] A) {
-        int n = A.length;
-        for (int x : A)
-            freq[Math.min(x, n)]++;
+    public int maximumElementAfterDecrementingAndRearranging(int[] arr) {
 
-        int res = 1;
-        for (int i = 2; i <= n; i++)
-            res = Math.min(res + freq[i], i);
+        Arrays.sort(arr);
 
-        for (int i = 0; i <= n; i++)
-            freq[i] = 0;
+        arr[0] = 1;
 
-        return res;
+        for (int i = 1; i < arr.length; i++) {
+
+            arr[i] = Math.min(arr[i], arr[i - 1] + 1);
+        }
+
+        return arr[arr.length - 1];
     }
 }
