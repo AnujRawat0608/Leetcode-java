@@ -1,65 +1,80 @@
 class Solution {
-    static final int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
     public int maximumSafenessFactor(List<List<Integer>> grid) {
         int n = grid.size();
-
-        if (grid.get(0).get(0) == 1 || grid.get(n - 1).get(n - 1) == 1)
+        if (grid.get(0).get(0) == 1 || grid.get(n - 1).get(n - 1) == 1 || n == 1)
             return 0;
+            
+        int arr[][] = new int[n][n];
 
-        int[][] A = new int[n][n];
-
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                A[i][j] = grid.get(i).get(j);
-
-        Queue<int[]> q = new LinkedList<>();
-
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (A[i][j] == 1)
-                    q.add(new int[]{i, j});
-
-        while (q.size() > 0) {
-            int[] head = q.poll();
-            int i = head[0];
-            int j = head[1];
-            int v = A[i][j];
-
-            for (int[] d : dirs) {
-                int x = i + d[0];
-                int y = j + d[1];
-
-                if (Math.min(x, y) >= 0 && Math.max(x, y) < n && A[x][y] == 0) {
-                    A[x][y] = v + 1;
-                    q.add(new int[]{x, y});
-                }
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                arr[i][j] = grid.get(i).get(j);
             }
         }
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
-        pq.add(new int[]{A[0][0], 0, 0});
-
-        while (pq.size() > 0) {
-            int[] head = pq.poll();
-            int sf = head[0];
-            int i = head[1];
-            int j = head[2];
-
-            if (i == n - 1 && j == n - 1)
-                return sf - 1;
-
-            for (int[] d : dirs) {
-                int x = i + d[0];
-                int y = j + d[1];
-
-                if (Math.min(x, y) >= 0 && Math.max(x, y) < n && A[x][y] > 0) {
-                    pq.add(new int[]{Math.min(sf, A[x][y]), x, y});
-                    A[x][y] *= -1;
-                }
+        arr = updateMatrix(arr);
+        
+        int low = 0, high = (n - 1) * 2;
+        int mid = 0; 
+        int result = mid;
+        while(low <= high) {
+            mid = (high - low) / 2 + low;
+            if(dfs(arr,0, 0, mid, n, new boolean[n][n])) {
+                result = mid;
+                low = mid + 1;
             }
+            else high = mid - 1;
         }
-
-        return A[n - 1][n - 1] - 1;
+        return result;
     }
+
+    public int[][] updateMatrix(int[][] matrix) {
+        int n = matrix.length;
+
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                matrix[row][col] ^= 1;
+                if (matrix[row][col] == 1) {
+                    matrix[row][col] = Integer.MAX_VALUE / 2;
+                }
+            }
+        }
+
+        for (int row = 0; row < n; row++) {
+            for (int col = 1; col < n; col++) {
+                matrix[row][col] = Math.min(matrix[row][col], matrix[row][col - 1] + 1);
+            }
+            for (int col = n - 2; col >= 0; col--) {
+                matrix[row][col] = Math.min(matrix[row][col], matrix[row][col + 1] + 1);
+            }
+        }
+
+        for (int col = 0; col < n; col++) {
+            for (int row = 1; row < n; row++) {
+                matrix[row][col] = Math.min(matrix[row][col], matrix[row - 1][col] + 1);
+            }
+            for (int row = n - 2; row >= 0; row--) {
+                matrix[row][col] = Math.min(matrix[row][col], matrix[row + 1][col] + 1);
+            }
+        }
+
+        return matrix;
+    }
+    
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, 1, -1};
+    boolean dfs(int arr[][], int r, int c, int mid, int n, boolean[][] visited) {
+        if(visited[r][c] || arr[r][c] < mid) return false;
+        if(r == n - 1 && c == n - 1) return true;
+
+        visited[r][c] = true;
+        for(int i = 0; i < 4; i++) {
+            int x = r + dx[i];
+            int y = c + dy[i];
+
+            if(x == -1 || y == -1 || x == n || y == n) continue;
+            if(dfs(arr, x, y, mid, n, visited)) return true;
+        }
+        return false;
+    }
+
 }
