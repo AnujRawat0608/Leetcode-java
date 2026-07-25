@@ -1,22 +1,16 @@
 class Solution {
     public int maxProduct(int n) {
-        List<Integer> digits = new ArrayList<>();
+        int max1 = 0, max2 = 0;
 
-        // Extract digits of n
-        while (n > 0) {
-            digits.add(n % 10);
-            n /= 10;
+        for (; n != 0; n /= 10) {
+            int d = n % 10;
+            if (d >= max1) {
+                max2 = max1;
+                max1 = d;
+            } else if (d > max2) 
+                max2 = d;
         }
 
-        int maxProduct = 0;
-
-        // Try all pairs of digits
-        for (int i = 0; i < digits.size(); i++) {
-            for (int j = i + 1; j < digits.size(); j++) {
-                maxProduct = Math.max(maxProduct, digits.get(i) * digits.get(j));
-            }
-        }
-
-        return maxProduct;
+        return max1 * max2;
     }
 }
