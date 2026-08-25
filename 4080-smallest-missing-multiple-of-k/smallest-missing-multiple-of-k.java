@@ -1,30 +1,18 @@
 class Solution {
     public int missingMultiple(int[] nums, int k) {
 
-        HashSet<Integer> set = new HashSet<>();
+        boolean[] present = new boolean[101];
 
-        // Put all nums into the set
+        // Mark numbers that exist
         for (int num : nums) {
-            set.add(num);
+            present[num] = true;
         }
 
-        // Check k, 2k, 3k, 4k...
-        int multiple = k;
-
-        while (set.contains(multiple)) {
-            multiple += k;
+        // Check multiples of k
+        for (int multiple = k; ; multiple += k) {
+            if (multiple > 100 || !present[multiple]) {
+                return multiple;
+            }
         }
-
-        return multiple;
     }
 }
-
-
-/*
-
-int[] nums
-int k 
-
-multipe of k is  a positive integer divisible by k
-
-*/
